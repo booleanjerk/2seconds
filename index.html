@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stopwatch Unlock</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: black;
+      color: lime;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-size: 2rem;
+    }
+    #status {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="display">0.00</div>
+  <div id="status">Press Spacebar to Start/Stop</div>
+
+  <script>
+    let startTime, timer, running = false;
+
+    function updateDisplay() {
+      const now = performance.now();
+      const elapsed = ((now - startTime) / 1000).toFixed(2);
+      document.getElementById('display').textContent = elapsed;
+    }
+
+    function startStopwatch() {
+      startTime = performance.now();
+      timer = setInterval(updateDisplay, 10);
+    }
+
+    function stopStopwatch() {
+      clearInterval(timer);
+      const finalTime = ((performance.now() - startTime) / 1000).toFixed(2);
+      document.getElementById('display').textContent = finalTime;
+
+      if (finalTime === "2.00") {
+        document.getElementById('status').textContent = "Yep";
+        setTimeout(() => {
+          window.location.href = "https://booleanjerk.github.io/hcbc"; // Change to your destination
+        }, 500);
+      } else {
+        document.getElementById('status').textContent = "Nope";
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (!running) {
+          running = true;
+          document.getElementById('status').textContent = "Running...";
+          startStopwatch();
+        } else {
+          running = false;
+          stopStopwatch();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
